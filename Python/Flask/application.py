@@ -10,7 +10,7 @@ def yo():
 	name_list=""
 	for class_no in range (65,65+6):
 		for id in range (1,35):
-			name_list += f"<label id=\"rounded_box_green\">6{chr(class_no)} {str(id).zfill(2)}</label>\n"
+			name_list += f"<label id=\"rounded_box_green\">6{chr(class_no)}&nbsp{str(id).zfill(2)}</label>\n"
 		name_list += "<br><br><br>"
 
 	return render_template("index.html", name_box=name_list)
