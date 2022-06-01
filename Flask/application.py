@@ -5,7 +5,6 @@ app = Flask(__name__,template_folder="./")
 
 @app.route("/")
 def yo():
-	# 第一个是pass进去的variable，?name=
 	# name = request.args.get("name", "world")
 
 	total_no_of_students = 6*35
