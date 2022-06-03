@@ -7,37 +7,148 @@
 	</head>
 
 	<style>
-	#rounded_box_green {
+	.rounded_box_green {
 		border-radius: 20px;
 		border: 3px solid #73AD21;
 		padding: 5px;
-		width: 55px;
+		width: 125px;
 		height: 30px;
 		position:relative;
 		display: inline-block;
 		margin-bottom: 10px;
+		text-align:center;
+		background-color: #FFFFFF;
 	}
 
-	#rounded_box_green_selected {
-		border-radius: 20px;
-		border: 3px solid #73AD21;
-		padding: 5px;
-		width: 55px;
-		height: 30px;
-		position:relative;
-		display: inline-block;
-		margin-bottom: 10px;
-		background-color: #73AD21;
+	#container {
+		width: 400px;
+		height: 400px;
+		position: relative;
+		background: yellow;
+	}
+
+	#animate {
+		width: 50px;
+		height: 50px;
+		position: absolute;
+		background-color: red;
 	}
 	</style>
 
 	<body>
-
 		<!-- <br><br> -->
-		{{ name_box|safe }}
+		{{ labels|safe }}
 		<!-- <p id="rounded_box_green">yo</p> -->
 
-		<br><br>
-		<input type="Go">
+		<p><button onclick="select()">Go</button></p> 
+
+		<p id="txt"></p>
+		<p id="test"></p>
+		<p id="full"></p>
+
 	</body>
+
+	<script>
+		let total = {{total_number}};
+		let selected_list = []; //save the selected ID
+		let no_of_selected = 0;
+
+		const awaitTimeout = delay => new Promise(resolve => setTimeout(resolve, delay));
+
+		function in_list(){
+		
+		}
+
+		//the actions after clicking the button
+		async function select() {
+			if (no_of_selected>=total) {
+				console.log("full");
+				document.getElementById("full").innerHTML = "full";
+			}
+
+			else {
+				let id = await lucky_dog();
+				selected_list.push(id);
+				// console.log(id);
+				
+				// change to yellow
+				document.getElementById(id).style.backgroundColor = "#FFBA00";
+
+				no_of_selected+=1;
+
+				document.getElementById("txt").innerHTML = selected_list;
+			}
+		}
+
+		// choose a student that hasn't appeared before
+		async function lucky_dog(){
+			let chosen = true;
+			let id = 0;
+
+			await random_jump();
+
+			while (chosen == true && no_of_selected<total){
+				id = Math.floor(Math.random() * total);
+
+				chosen=false;
+				for (let i=0; i<selected_list.length; ++i){
+					if (selected_list[i]==id){
+						chosen = true;
+					}
+				}
+			}
+
+			return id;
+		}
+
+		// randomly toggle
+		async function random_jump() {
+			// const elem = document.getElementById("animate");
+			let x = document.getElementById("txt");
+			let step = 50;
+			let acceleration = 30;
+			let time = 0;
+			let id = -1;
+			let total_time = 5000
+
+			while (time+step < total_time){
+				step+=acceleration; 
+				time+=step;
+				setTimeout(function(){ x.value= time + "ms" }, time);
+				setTimeout(frame, time);
+				frame();
+
+				console.log(time)
+			}
+			await awaitTimeout(total_time);
+
+			function frame() {
+				// turns to white
+				if (id!=-1) toggle(id);
+				// elem.style.top = Math.random() * 350 + "px"; 
+				// elem.style.left = Math.random() * 350 + "px";    
+				
+				// turns to green
+				id = Math.floor(Math.random() * total);
+				toggle(id);
+			}
+			toggle(id);
+		}
+
+		// toggle a label to green or white
+		function toggle(id){
+			selected = document.getElementById(id)
+			// console.log(selected.style.backgroundColor)
+
+			if (selected.style.backgroundColor === "#FFFFFF" || selected.style.backgroundColor === "") {
+				selected.style.backgroundColor = "#73AD21";
+				// console.log("er")
+			}
+			else if (selected.style.backgroundColor === "rgb(115, 173, 33)"){
+				selected.style.backgroundColor = "#FFFFFF";
+				// console.log("er")
+			}
+			// if it's selected, it will be none of the above two colors
+		}
+	</script>
 </html>
