@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<style>
+#container {
+  width: 400px;
+  height: 400px;
+  position: relative;
+  background: yellow;
+}
+#animate {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  background-color: red;
+}
+</style>
+<body>
+
+<p><button onclick="myMove()">Click Me</button></p> 
+<p id="demo"></p>
+<div id ="container">
+  <div id ="animate"></div>
+</div>
+<input type="text" id="txt">
+<script>
+function myMove() {
+  	const elem = document.getElementById("animate");
+  	let x = document.getElementById("txt");
+  	let hi = 50; let time = 0; 
+  //  setTimeout(function(){ x.value= 0 + "ms" }, );
+	while (time < 5000){
+    	hi+=1; 
+        time+=hi;
+        setTimeout(function(){ x.value= time + "ms" }, time);
+		setTimeout(frame, time);
+	}
+   	function frame() {
+      elem.style.top = Math.random() * 350 + "px"; 
+      elem.style.left = Math.random() * 350 + "px";    
+   	}
+}
+</script>
+
+</body>
+</html>
