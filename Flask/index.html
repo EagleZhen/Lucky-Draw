@@ -68,12 +68,12 @@
 
 			else {
 				if (no_of_selected > 0){
-					await turn_back();
+					await toggle(selected_list[no_of_selected-1])
 				}
 				
 				let id = await lucky_dog();
 				
-			//	console.log(last_lucky_dog.backgroundColor)
+				// console.log(last_lucky_dog.backgroundColor)
 
 				selected_list.push(id);
 				// console.log(id);
@@ -88,9 +88,6 @@
 			}
 		}
 
-		async function turn_back(){
-			toggle(selected_list[no_of_selected-1]);
-		}
 		// choose a student that hasn't appeared before
 		async function lucky_dog(){
 			let chosen = true;
@@ -152,9 +149,9 @@
 		async function toggle(id){
 			selected = document.getElementById(id)
 			// console.log(selected.style.backgroundColor)
-			//document.getElementById("txt").innerHTML = id + " " + selected.style.backgroundColor;
+			// document.getElementById("txt").innerHTML = id + " " + selected.style.backgroundColor;
 			if (selected.style.backgroundColor === "rgb(255, 255, 255)" || selected.style.backgroundColor === "") {
-				selected.style.backgroundColor = "#73AD21";
+				selected.style.backgroundColor = "rgb(115, 173, 33)";
 				// console.log("er")
 			}
 			else {//if (selected.style.backgroundColor === "rgb(115, 173, 33)" || selected.style.backgroundColor === "#FFBA00"){
