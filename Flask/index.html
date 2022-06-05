@@ -126,37 +126,39 @@
 				step+=acceleration; 
 				time+=step;
 			//	setTimeout(function(){ x.value= time + "ms" }, time);
-				setTimeout(frame, time);
-				frame();
+				setTimeout(await frame, time);
+				await frame();
 
 				console.log(time)
 			}
 			await awaitTimeout(total_time);
 
-			function frame() {
+			async function frame() {
 				// turns to white
-				if (id!=-1) toggle(id);
+				if (id!=-1) await toggle(id);
 				// elem.style.top = Math.random() * 350 + "px"; 
 				// elem.style.left = Math.random() * 350 + "px";    
 				
 				// turns to green
 				id = Math.floor(Math.random() * total);
-				toggle(id);
+		//		document.getElementById("txt").style.textAlign = "center";
+				
+				await toggle(id);
 			}
-			toggle(id);
+			await toggle(id);
 		}
 
 		// toggle a label to green or white
-		function toggle(id){
+		async function toggle(id){
 			selected = document.getElementById(id)
 			// console.log(selected.style.backgroundColor)
-
-			if (selected.style.backgroundColor === "#FFFFFF" || selected.style.backgroundColor === "") {
+			//document.getElementById("txt").innerHTML = id + " " + selected.style.backgroundColor;
+			if (selected.style.backgroundColor === "rgb(255, 255, 255)" || selected.style.backgroundColor === "") {
 				selected.style.backgroundColor = "#73AD21";
 				// console.log("er")
 			}
 			else {//if (selected.style.backgroundColor === "rgb(115, 173, 33)" || selected.style.backgroundColor === "#FFBA00"){
-				selected.style.backgroundColor = "#FFFFFF";
+				selected.style.backgroundColor = "rgb(255, 255, 255)";
 				// console.log("er")
 			}
 			// if it's selected, it will be none of the above two colors
