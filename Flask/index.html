@@ -24,7 +24,7 @@
 		width: 400px;
 		height: 400px;
 		position: relative;
-		background: yellow;
+		background: rgb(255, 255, 0);
 	}
 
 	#animate {
@@ -39,9 +39,9 @@
 		<!-- <br><br> -->
 		{{ labels|safe }}
 		<!-- <p id="rounded_box_green">yo</p> -->
-
-		<p><button onclick="select()">Go</button></p> 
-
+		<div style="text-align:center">
+			<button style="height:50px;width:200px;font-size: 20px" onclick="select()">抽獎</button>
+		</div>
 		<p id="txt"></p>
 		<p id="test"></p>
 		<p id="full"></p>
@@ -67,7 +67,14 @@
 			}
 
 			else {
+				if (no_of_selected > 0){
+					await turn_back();
+				}
+				
 				let id = await lucky_dog();
+				
+			//	console.log(last_lucky_dog.backgroundColor)
+
 				selected_list.push(id);
 				// console.log(id);
 				
@@ -75,11 +82,15 @@
 				document.getElementById(id).style.backgroundColor = "#FFBA00";
 
 				no_of_selected+=1;
-
-				document.getElementById("txt").innerHTML = selected_list;
+				document.getElementById("txt").style.textAlign = "center";
+				document.getElementById("txt").innerHTML = ("得獎者: " + document.getElementById(id).textContent).fontsize(25);
+			//	document.getElementById("txt").innerHTML = selected_list;
 			}
 		}
 
+		async function turn_back(){
+			toggle(selected_list[no_of_selected-1]);
+		}
 		// choose a student that hasn't appeared before
 		async function lucky_dog(){
 			let chosen = true;
@@ -106,15 +117,15 @@
 			// const elem = document.getElementById("animate");
 			let x = document.getElementById("txt");
 			let step = 50;
-			let acceleration = 30;
+			let acceleration = 10;
 			let time = 0;
 			let id = -1;
-			let total_time = 5000
+			let total_time = 15000
 
 			while (time+step < total_time){
 				step+=acceleration; 
 				time+=step;
-				setTimeout(function(){ x.value= time + "ms" }, time);
+			//	setTimeout(function(){ x.value= time + "ms" }, time);
 				setTimeout(frame, time);
 				frame();
 
@@ -144,7 +155,7 @@
 				selected.style.backgroundColor = "#73AD21";
 				// console.log("er")
 			}
-			else if (selected.style.backgroundColor === "rgb(115, 173, 33)"){
+			else {//if (selected.style.backgroundColor === "rgb(115, 173, 33)" || selected.style.backgroundColor === "#FFBA00"){
 				selected.style.backgroundColor = "#FFFFFF";
 				// console.log("er")
 			}

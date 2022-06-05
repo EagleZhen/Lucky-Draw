@@ -1,21 +1,24 @@
-import justpy as jp
+from flask import Flask, render_template, request
+from random import randrange
 
-def button_click(self, msg):
-    self.num_clicked += 1
-    self.message.text = f'{self.text} clicked. Number of clicks: {self.num_clicked}'
-    self.set_class('bg-red-500')
-    self.set_class('bg-red-700', 'hover')
+app = Flask(__name__,template_folder="./")
 
-def event_demo():
-    number_of_buttons = 25
-    wp = jp.WebPage()
-    button_div = jp.Div(classes='flex m-4 flex-wrap', a=wp)
-    button_classes = 'w-32 mr-2 mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'
-    message = jp.Div(text='No button clicked yet', classes='text-2xl border m-4 p-2', a=wp)
-    for i in range(1, number_of_buttons + 1):
-        b = jp.Button(text=f'Button {i}', a=button_div, classes=button_classes, click=button_click)
-        b.message = message
-        b.num_clicked = 0
-    return wp
+@app.route("/")
+def yo():
+	# name = request.args.get("name", "world")
 
-jp.justpy(event_demo)
+	total_no_of_students = 6*35
+	lucky_dog = randrange(1,total_no_of_students)
+
+	name_list=""
+	for class_no in range (65,65+6):
+		for id in range (1,35):
+			if ((class_no-65)*35+id==lucky_dog):
+				name_list += f"<label id=\"rounded_box_green_selected\">6{chr(class_no)}&nbsp{str(id).zfill(2)}</label>\n"
+			else:
+				name_list += f"<label id=\"rounded_box_green\">6{chr(class_no)}&nbsp{str(id).zfill(2)}</label>\n"
+
+	return render_template("index.html", name_box=name_list)
+
+if __name__ == '__main__':
+    app.run(debug=True)
