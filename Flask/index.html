@@ -1,9 +1,10 @@
-<!DOVTYPE html>
+<!DOCTYPE html>
 
 <html lang="en">
 	<head>
-		<meta name="viewport" content="initial-scale=1", width="device_width">
+		<meta name="viewport" content="initial-scale=1" width="device_width" charset="UTF-8">
 		<title>Lucky Draw</title>
+		
 	</head>
 
 	<style>
@@ -68,6 +69,9 @@
 
 		//the actions after clicking the button
 		async function select() {
+			//clear the lucky dog in a new draw
+			document.getElementById("txt").innerHTML = "";
+
 			//cannot click when jumping
 			document.getElementById("lucky_draw_button").disabled = true;
 
