@@ -62,6 +62,7 @@
 	<script>
 		let total = {{total_number}};
 		let selected_list = []; //save the selected ID
+		let fiveguy = [];
 		let no_of_selected = 0;
 		let gg = false;
 		const awaitTimeout = delay => new Promise(resolve => setTimeout(resolve, delay));
@@ -73,19 +74,21 @@
 
 			//cannot click when jumping
 			document.getElementById("lucky_draw_button").disabled = true;
-
+			document.getElementById("lucky_draw_button5").disabled = true;
 			if (no_of_selected>=total) {
 				console.log("full");
 				document.getElementById("full").innerHTML = "full";
 			}
 			else {
-				gg = false;
-				if (no_of_selected > 0){
-					await toggle(selected_list[no_of_selected-1])
+				for (let i = 0 ;i < fiveguy.length; i++){
+					await turn_back(fiveguy[i]);
 				}
+				fiveguy.length = 0;
+				gg = false;
 				let id = await lucky_dog();
 
 				selected_list.push(id);
+				fiveguy.push(id);
 				document.getElementById(id).style.backgroundColor = "#FFBA00";
 
 				no_of_selected+=1;
@@ -95,6 +98,7 @@
 
 				//can click again after jumping
 				document.getElementById("lucky_draw_button").disabled = false;
+				document.getElementById("lucky_draw_button5").disabled = false;
 		}
 
 		async function select5() {
@@ -103,20 +107,22 @@
 
 			//cannot click when jumping
 			document.getElementById("lucky_draw_button5").disabled = true;
-
+			document.getElementById("lucky_draw_button").disabled = true;
 			if (no_of_selected>=total) {
 				console.log("full");
 				document.getElementById("full").innerHTML = "full";
 			}
 			else {
-				gg = true;
-				if (no_of_selected > 0){
-					await toggle(selected_list[no_of_selected-1])
+				for (let i = 0 ;i < fiveguy.length; i++){
+					await turn_back(fiveguy[i]);
 				}
+				fiveguy.length = 0;
+				gg = true;
 				for (let i = 0; i < 5;i++ ){
 					let id = await lucky_dog();
 
 					selected_list.push(id);
+					fiveguy.push(id);
 					document.getElementById(id).style.backgroundColor = "#FFBA00";
 
 					no_of_selected+=1;
@@ -126,6 +132,7 @@
 			}
 			//can click again after jumping
 			document.getElementById("lucky_draw_button5").disabled = false;
+			document.getElementById("lucky_draw_button").disabled = false;
 		}
 
 		// choose a student that hasn't appeared before
@@ -145,7 +152,7 @@
 					}
 				}
 			}
-
+			
 			return id;
 		}
 		
@@ -158,9 +165,9 @@
 			let id = -1;
 			let total_time = 10000;
 			if (gg == true){
-				total_time = 2000;
+				total_time = 3000;
 				step = 100;
-				acceleration = 70;
+				acceleration = 40;
 			} 
  			while (time+step < total_time){
 				step+=acceleration; 
@@ -179,7 +186,7 @@
 				id = Math.floor(Math.random() * total);
 				await toggle(id);
 			}
-			await toggle(id);
+			await turn_back(id);
 		}
 
 		// toggle a label to green or white
@@ -188,9 +195,15 @@
 			if (selected.style.backgroundColor == "rgb(255, 255, 255)" || selected.style.backgroundColor == "") {
 				selected.style.backgroundColor = "rgb(115, 173, 33)";
 			}
-			else {
+			else 
+			if (selected.style.backgroundColor == "rgb(115, 173, 33)"){
 				selected.style.backgroundColor = "rgb(255, 255, 255)";
 			}
+		}
+
+		async function turn_back(id){
+			selected = document.getElementById(id)
+			selected.style.backgroundColor = "rgb(255, 255, 255)";
 		}
 	</script>
 </html>
