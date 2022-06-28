@@ -1,2 +1,2 @@
 
-	#select the lucky number
+		codes+=f"<label class=\"{class_id}
