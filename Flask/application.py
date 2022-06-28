@@ -15,16 +15,13 @@ def main():
 	codes=""
 	for cnt,info in enumerate(info_list):
 		class_id = "rounded_box_green"
-		label_id = cnt
+		label_id = cnt+1
 		content = info
 
 		codes+=f"<label class=\"{class_id}\" id=\"{label_id}\">{content}</label>\n"
 
-	#select the lucky number
-	selected_id = randrange(0,cnt)
-
 	#render the webpage
-	return render_template("index.html", labels=codes, total_number = cnt+1, lucky_dog = selected_id)
+	return render_template("index.html", labels=codes, total_number = cnt+1)
 
 if __name__ == '__main__':
     app.run(debug=True)
