@@ -63,7 +63,7 @@
 		let total = {{total_number}};
 		let selected_list = []; //save the selected ID
 		let no_of_selected = 0;
-
+		let gg = false;
 		const awaitTimeout = delay => new Promise(resolve => setTimeout(resolve, delay));
 
 		//the actions after clicking the button
@@ -79,10 +79,10 @@
 				document.getElementById("full").innerHTML = "full";
 			}
 			else {
+				gg = false;
 				if (no_of_selected > 0){
 					await toggle(selected_list[no_of_selected-1])
 				}
-
 				let id = await lucky_dog();
 
 				selected_list.push(id);
@@ -95,9 +95,9 @@
 
 				//can click again after jumping
 				document.getElementById("lucky_draw_button").disabled = false;
-			}
+		}
 
-			async function select5() {
+		async function select5() {
 			//clear the lucky dog in a new draw
 			document.getElementById("txt").innerHTML = "";
 
@@ -109,24 +109,25 @@
 				document.getElementById("full").innerHTML = "full";
 			}
 			else {
+				gg = true;
 				if (no_of_selected > 0){
 					await toggle(selected_list[no_of_selected-1])
 				}
+				for (let i = 0; i < 5;i++ ){
+					let id = await lucky_dog();
 
-				let id = await lucky_dog();
+					selected_list.push(id);
+					document.getElementById(id).style.backgroundColor = "#FFBA00";
 
-				selected_list.push(id);
-				document.getElementById(id).style.backgroundColor = "#FFBA00";
-
-				no_of_selected+=1;
-				document.getElementById("txt").style.textAlign = "center";
-				document.getElementById("txt").innerHTML = ("得獎者: " + document.getElementById(id).textContent).fontsize(25);
+					no_of_selected+=1;
+					document.getElementById("txt").style.textAlign = "center";
+					document.getElementById("txt").innerHTML = ("得獎者: " + document.getElementById(id).textContent).fontsize(25);
+				}
 			}
-
 			//can click again after jumping
-			document.getElementById("lucky_draw_button").disabled = false;
+			document.getElementById("lucky_draw_button5").disabled = false;
 		}
-		
+
 		// choose a student that hasn't appeared before
 		async function lucky_dog(){
 			let chosen = true;
@@ -147,18 +148,21 @@
 
 			return id;
 		}
-
+		
 		// randomly toggle
 		async function random_jump() {
-			// const elem = document.getElementById("animate");
 			let x = document.getElementById("txt");
 			let step = 50;
 			let acceleration = 40;
 			let time = 0;
 			let id = -1;
-			let total_time = 10000
-
-			while (time+step < total_time){
+			let total_time = 10000;
+			if (gg == true){
+				total_time = 2000;
+				step = 100;
+				acceleration = 70;
+			} 
+ 			while (time+step < total_time){
 				step+=acceleration; 
 				time+=step;
 				setTimeout(await frame, time);
@@ -181,13 +185,12 @@
 		// toggle a label to green or white
 		async function toggle(id){
 			selected = document.getElementById(id)
-			if (selected.style.backgroundColor === "rgb(255, 255, 255)" || selected.style.backgroundColor === "") {
+			if (selected.style.backgroundColor == "rgb(255, 255, 255)" || selected.style.backgroundColor == "") {
 				selected.style.backgroundColor = "rgb(115, 173, 33)";
 			}
 			else {
 				selected.style.backgroundColor = "rgb(255, 255, 255)";
 			}
-			// if it's selected, it will be none of the above two colors
 		}
 	</script>
 </html>

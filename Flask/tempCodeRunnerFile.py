@@ -1,2 +1,2 @@
 
-    app.run(debug=True)
+	#select the lucky number
