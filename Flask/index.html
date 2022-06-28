@@ -19,6 +19,8 @@
 		margin-bottom: 10px;
 		text-align:center;
 		background-color: #FFFFFF;
+		font-size: 20px;
+		opacity: 0.7;
 	}
 
 	.button {
@@ -45,102 +47,79 @@
 		opacity: 0.6;
 		cursor: not-allowed;
 	}
+
+	body {
+		background: rgba(0, 0, 0, 0.3) url("https://i.imgur.com/saPI06V.png");
+		background-repeat: no-repeat;
+  		background-size: cover;
+		background-blend-mode: darken;
+	}
 	</style>
 
 	<body>
 		{{ labels|safe }}
 		<div style="text-align:center">
-			<button class="button" onclick="select()" id="lucky_draw_button">抽1個</button>
-			<button class="button" onclick="select5()" id="lucky_draw_button5">抽5個</button>
+			<button class="button" onclick="select(1)" id="lucky_draw_button">抽1個</button>
+			<button class="button" onclick="select(5)" id="lucky_draw_button5">抽5個</button>
 		</div>
 		<p id="txt"></p>
 		<p id="test"></p>
 		<p id="full"></p>
-
 	</body>
 
 	<script>
 		let total = {{total_number}};
 		let selected_list = []; //save the selected ID
-		let fiveguy = [];
 		let no_of_selected = 0;
-		let gg = false;
 		const awaitTimeout = delay => new Promise(resolve => setTimeout(resolve, delay));
 
-		//the actions after clicking the button
-		async function select() {
-			//clear the lucky dog in a new draw
-			document.getElementById("txt").innerHTML = "";
+		async function select(no_of_winner) {
+			initialize();
+			function initialize(){
+				//cannot click when jumping
+				document.getElementById("lucky_draw_button5").disabled = true;
+				document.getElementById("lucky_draw_button").disabled = true;
+				for (let i=1; i<=total; ++i){
+					let selected = document.getElementById(i)
+					selected.style.backgroundColor = "rgb(255, 255, 255)";
+					selected.style.width = "125px";
+					selected.style.height = "30px";
+					selected.style.fontSize = "20px";
+				}
+			}
 
-			//cannot click when jumping
-			document.getElementById("lucky_draw_button").disabled = true;
-			document.getElementById("lucky_draw_button5").disabled = true;
 			if (no_of_selected>=total) {
 				console.log("full");
 				document.getElementById("full").innerHTML = "full";
 			}
 			else {
-				for (let i = 0 ;i < fiveguy.length; i++){
-					await turn_back(fiveguy[i]);
-				}
-				fiveguy.length = 0;
-				gg = false;
-				let id = await lucky_dog();
-
-				selected_list.push(id);
-				fiveguy.push(id);
-				document.getElementById(id).style.backgroundColor = "#FFBA00";
-
-				no_of_selected+=1;
-				document.getElementById("txt").style.textAlign = "center";
-				document.getElementById("txt").innerHTML = ("得獎者: " + document.getElementById(id).textContent).fontsize(25);
-			}
-
-				//can click again after jumping
-				document.getElementById("lucky_draw_button").disabled = false;
-				document.getElementById("lucky_draw_button5").disabled = false;
-		}
-
-		async function select5() {
-			//clear the lucky dog in a new draw
-			document.getElementById("txt").innerHTML = "";
-
-			//cannot click when jumping
-			document.getElementById("lucky_draw_button5").disabled = true;
-			document.getElementById("lucky_draw_button").disabled = true;
-			if (no_of_selected>=total) {
-				console.log("full");
-				document.getElementById("full").innerHTML = "full";
-			}
-			else {
-				for (let i = 0 ;i < fiveguy.length; i++){
-					await turn_back(fiveguy[i]);
-				}
-				fiveguy.length = 0;
 				gg = true;
-				for (let i = 0; i < 5;i++ ){
-					let id = await lucky_dog();
+				for (let i = 1; i <= no_of_winner; ++i){
+					let id = await lucky_dog(no_of_winner);
 
 					selected_list.push(id);
-					fiveguy.push(id);
-					document.getElementById(id).style.backgroundColor = "#FFBA00";
-
-					no_of_selected+=1;
-					document.getElementById("txt").style.textAlign = "center";
-					document.getElementById("txt").innerHTML = ("得獎者: " + document.getElementById(id).textContent).fontsize(25);
+					toggle_winner(document.getElementById(id));
 				}
 			}
+			
 			//can click again after jumping
 			document.getElementById("lucky_draw_button5").disabled = false;
 			document.getElementById("lucky_draw_button").disabled = false;
 		}
 
+		function toggle_winner(winner){
+			winner.style.backgroundColor = "rgb(255,186,0)";
+			winner.style.width = "500px";
+			winner.style.height = "120px";
+			winner.style.fontSize = "80px";
+		}
+
 		// choose a student that hasn't appeared before
-		async function lucky_dog(){
+		async function lucky_dog(no_of_winner){
 			let chosen = true;
 			let id = 0;
 
-			await random_jump();
+			await random_jump(no_of_winner);
 
 			while (chosen == true && no_of_selected<total){
 				id = Math.floor(Math.random() * total);
@@ -157,25 +136,27 @@
 		}
 		
 		// randomly toggle
-		async function random_jump() {
+		async function random_jump(no_of_winner) {
 			let x = document.getElementById("txt");
 			let step = 50;
 			let acceleration = 40;
 			let time = 0;
 			let id = -1;
 			let total_time = 10000;
-			if (gg == true){
+			
+			if (no_of_winner == 5){
 				total_time = 3000;
-				step = 100;
-				acceleration = 40;
-			} 
+				step = 200;
+				acceleration = 0;
+			}
+
  			while (time+step < total_time){
 				step+=acceleration; 
 				time+=step;
 				setTimeout(await frame, time);
 				await frame();
 
-				console.log(time)
+				// console.log(time)
 			}
 
 			// wait for the total time, so that the program will not stop immediately
@@ -183,10 +164,10 @@
 
 			async function frame() {
 				if (id!=-1) await toggle(id);
-				id = Math.floor(Math.random() * total);
+				id = Math.floor(Math.random() * total + 1);
 				await toggle(id);
 			}
-			await turn_back(id);
+			await toggle(id);
 		}
 
 		// toggle a label to green or white
@@ -195,15 +176,9 @@
 			if (selected.style.backgroundColor == "rgb(255, 255, 255)" || selected.style.backgroundColor == "") {
 				selected.style.backgroundColor = "rgb(115, 173, 33)";
 			}
-			else 
-			if (selected.style.backgroundColor == "rgb(115, 173, 33)"){
+			else if (selected.style.backgroundColor == "rgb(115, 173, 33)"){
 				selected.style.backgroundColor = "rgb(255, 255, 255)";
 			}
-		}
-
-		async function turn_back(id){
-			selected = document.getElementById(id)
-			selected.style.backgroundColor = "rgb(255, 255, 255)";
 		}
 	</script>
 </html>
