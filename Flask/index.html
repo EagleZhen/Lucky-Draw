@@ -112,6 +112,7 @@
 			winner.style.width = "500px";
 			winner.style.height = "120px";
 			winner.style.fontSize = "80px";
+			console.log(winner.innerHTML);
 		}
 
 		// choose a student that hasn't appeared before
@@ -122,7 +123,7 @@
 			await random_jump(no_of_winner);
 
 			while (chosen == true && no_of_selected<total){
-				id = Math.floor(Math.random() * total);
+				id = random_range(1,total);
 
 				chosen=false;
 				for (let i=0; i<selected_list.length; ++i){
@@ -164,7 +165,7 @@
 
 			async function frame() {
 				if (id!=-1) await toggle(id);
-				id = Math.floor(Math.random() * total + 1);
+				id = random_range(1,total);
 				await toggle(id);
 			}
 			await toggle(id);
@@ -179,6 +180,10 @@
 			else if (selected.style.backgroundColor == "rgb(115, 173, 33)"){
 				selected.style.backgroundColor = "rgb(255, 255, 255)";
 			}
+		}
+
+		function random_range(left, right){
+			return (Math.floor(Math.random() * (right-left+1)) + left);
 		}
 	</script>
 </html>
