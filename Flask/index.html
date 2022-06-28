@@ -85,6 +85,9 @@
 					selected.style.width = "125px";
 					selected.style.height = "30px";
 					selected.style.fontSize = "20px";
+					selected.style.color = "rgb(0,0,0)"
+					selected.style.opacity = "0.7";
+					selected.style.border = "3px solid #73AD21";
 				}
 			}
 
@@ -93,7 +96,6 @@
 				document.getElementById("full").innerHTML = "full";
 			}
 			else {
-				gg = true;
 				for (let i = 1; i <= no_of_winner; ++i){
 					let id = await lucky_dog(no_of_winner);
 
@@ -105,13 +107,17 @@
 			//can click again after jumping
 			document.getElementById("lucky_draw_button5").disabled = false;
 			document.getElementById("lucky_draw_button").disabled = false;
+			console.log("==================");
 		}
 
 		function toggle_winner(winner){
 			winner.style.backgroundColor = "rgb(86,109,121)";
-			winner.style.width = "270px";
+			winner.style.width = "275px";
 			winner.style.height = "60px";
 			winner.style.fontSize = "40px";
+			winner.style.color = "rgb(255,255,255)"
+			winner.style.opacity = "0.9"
+			winner.style.border = "1px solid rgb(255,255,255)"
 			console.log(winner.innerHTML);
 		}
 
@@ -147,9 +153,10 @@
 			
 			if (no_of_winner == 5){
 				total_time = 3000;
-				step = 100;
-				acceleration = 60;
-			} 
+				step = 200;
+				acceleration = 0;
+			}
+
  			while (time+step < total_time){
 				step+=acceleration; 
 				time+=step;
