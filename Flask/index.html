@@ -48,11 +48,10 @@
 	</style>
 
 	<body>
-		<!-- <br><br> -->
 		{{ labels|safe }}
-		<!-- <p id="rounded_box_green">yo</p> -->
 		<div style="text-align:center">
-			<button class="button" onclick="select()" id="lucky_draw_button">抽獎</button>
+			<button class="button" onclick="select()" id="lucky_draw_button">抽1個</button>
+			<button class="button" onclick="select5()" id="lucky_draw_button5">抽5個</button>
 		</div>
 		<p id="txt"></p>
 		<p id="test"></p>
@@ -79,32 +78,55 @@
 				console.log("full");
 				document.getElementById("full").innerHTML = "full";
 			}
-
 			else {
 				if (no_of_selected > 0){
 					await toggle(selected_list[no_of_selected-1])
 				}
-				
+
 				let id = await lucky_dog();
-				
-				// console.log(last_lucky_dog.backgroundColor)
 
 				selected_list.push(id);
-				// console.log(id);
-				
-				// change to yellow
 				document.getElementById(id).style.backgroundColor = "#FFBA00";
 
 				no_of_selected+=1;
 				document.getElementById("txt").style.textAlign = "center";
 				document.getElementById("txt").innerHTML = ("得獎者: " + document.getElementById(id).textContent).fontsize(25);
-			//	document.getElementById("txt").innerHTML = selected_list;
+			}
+
+				//can click again after jumping
+				document.getElementById("lucky_draw_button").disabled = false;
+			}
+
+			async function select5() {
+			//clear the lucky dog in a new draw
+			document.getElementById("txt").innerHTML = "";
+
+			//cannot click when jumping
+			document.getElementById("lucky_draw_button5").disabled = true;
+
+			if (no_of_selected>=total) {
+				console.log("full");
+				document.getElementById("full").innerHTML = "full";
+			}
+			else {
+				if (no_of_selected > 0){
+					await toggle(selected_list[no_of_selected-1])
+				}
+
+				let id = await lucky_dog();
+
+				selected_list.push(id);
+				document.getElementById(id).style.backgroundColor = "#FFBA00";
+
+				no_of_selected+=1;
+				document.getElementById("txt").style.textAlign = "center";
+				document.getElementById("txt").innerHTML = ("得獎者: " + document.getElementById(id).textContent).fontsize(25);
 			}
 
 			//can click again after jumping
 			document.getElementById("lucky_draw_button").disabled = false;
 		}
-
+		
 		// choose a student that hasn't appeared before
 		async function lucky_dog(){
 			let chosen = true;
@@ -139,7 +161,6 @@
 			while (time+step < total_time){
 				step+=acceleration; 
 				time+=step;
-			//	setTimeout(function(){ x.value= time + "ms" }, time);
 				setTimeout(await frame, time);
 				await frame();
 
@@ -150,15 +171,8 @@
 			await awaitTimeout(time+step);
 
 			async function frame() {
-				// turns to white
 				if (id!=-1) await toggle(id);
-				// elem.style.top = Math.random() * 350 + "px"; 
-				// elem.style.left = Math.random() * 350 + "px";    
-				
-				// turns to green
 				id = Math.floor(Math.random() * total);
-		//		document.getElementById("txt").style.textAlign = "center";
-				
 				await toggle(id);
 			}
 			await toggle(id);
@@ -167,15 +181,11 @@
 		// toggle a label to green or white
 		async function toggle(id){
 			selected = document.getElementById(id)
-			// console.log(selected.style.backgroundColor)
-			// document.getElementById("txt").innerHTML = id + " " + selected.style.backgroundColor;
 			if (selected.style.backgroundColor === "rgb(255, 255, 255)" || selected.style.backgroundColor === "") {
 				selected.style.backgroundColor = "rgb(115, 173, 33)";
-				// console.log("er")
 			}
-			else {//if (selected.style.backgroundColor === "rgb(115, 173, 33)" || selected.style.backgroundColor === "#FFBA00"){
+			else {
 				selected.style.backgroundColor = "rgb(255, 255, 255)";
-				// console.log("er")
 			}
 			// if it's selected, it will be none of the above two colors
 		}
