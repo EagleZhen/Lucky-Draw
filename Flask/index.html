@@ -144,18 +144,20 @@
 		
 		// randomly toggle
 		async function random_jump(no_of_winner) {
+			//no_of_winner == 1
 			let x = document.getElementById("txt");
 			let step = 50;
-			let acceleration = 40;
+			let acceleration = 20;
 			let time = 0;
 			let id = -1;
-			let total_time = 7000;
+			let total_time = 10000;
 			
 			if (no_of_winner == 5){
-				total_time = 1500;
-				step = 200;
+				total_time = 1000;
+				step = 100;
 				acceleration = 0;
-			} 
+			}
+
  			while (time+step < total_time){
 				step+=acceleration; 
 				time+=step;
